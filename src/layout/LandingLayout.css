@@ -1,0 +1,8 @@
+/* Default background on every element */
+body {
+  background-color: #fff !important;
+}
+
+.landing-layout {
+  color: #333;
+}
