@@ -1,46 +1,17 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CContainer,
-  CForm,
-  CFormInput,
-  CFormLabel,
-  CRow,
-  CAlert,
-} from '@coreui/react'
-import useUpdateForm from 'src/hooks/useUpdateForm'
-import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet'
+import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import useUpdateForm from 'src/hooks/useUpdateForm'
 
-const UserEdit = () => {
+const UserView = () => {
   const { id } = useParams()
-  const {
-    formData,
-    fetchError,
-    isFetching,
-    updateError,
-    isUpdating,
-    handleChange,
-    handleSubmit,
-    position,
-    handleMapClick,
-  } = useUpdateForm(id)
+  const { formData, fetchError, isFetching, position } = useUpdateForm(id)
 
   // eslint-disable-next-line react/prop-types
   const LocationMarker = ({ position }) => {
     const map = useMap()
-
-    useMapEvents({
-      click(e) {
-        const { lat, lng } = e.latlng
-        handleMapClick(lat, lng)
-      },
-    })
 
     React.useEffect(() => {
       if (position) {
@@ -65,36 +36,23 @@ const UserEdit = () => {
         <CCol md={9} lg={7} xl={6}>
           <CCard className="mx-4">
             <CCardHeader>
-              <h1>Editar Usuario</h1>
+              <h1>Ver Usuario</h1>
             </CCardHeader>
             <CCardBody className="p-4">
-              <CForm onSubmit={handleSubmit} encType="multipart/form-data">
-                <CFormLabel>Nombre</CFormLabel>
-                <CFormInput
-                  name="firstName"
-                  placeholder="Nombre"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="mb-3"
-                />
-                <CFormLabel>Apellido</CFormLabel>
-                <CFormInput
-                  name="lastName"
-                  placeholder="Apellido"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="mb-3"
-                />
-                <CFormLabel>Email</CFormLabel>
-                <CFormInput
-                  name="email"
-                  placeholder="Email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="mb-3"
-                />
-                <CFormLabel>Selecciona una ubicación en el mapa</CFormLabel>
+              <div>
+                <strong>Nombre: </strong>
+                <span>{formData.firstName}</span>
+              </div>
+              <div>
+                <strong>Apellido: </strong>
+                <span>{formData.lastName}</span>
+              </div>
+              <div>
+                <strong>Email: </strong>
+                <span>{formData.email}</span>
+              </div>
+              <div>
+                <strong>Ubicación: </strong>
                 <div style={{ height: '400px', marginBottom: '1rem' }}>
                   <MapContainer
                     center={[position.lat, position.lng]}
@@ -108,99 +66,43 @@ const UserEdit = () => {
                     <LocationMarker position={position} />
                   </MapContainer>
                 </div>
-                <CFormLabel>Latitud</CFormLabel>
-                <CFormInput
-                  name="latitud"
-                  placeholder="Latitud"
-                  type="number"
-                  value={position.lat}
-                  readOnly
-                  className="mb-3"
-                />
-                <CFormLabel>Longitud</CFormLabel>
-                <CFormInput
-                  name="longitud"
-                  placeholder="Longitud"
-                  type="number"
-                  value={position.lng}
-                  readOnly
-                  className="mb-3"
-                />
-                <CFormLabel>País</CFormLabel>
-                <CFormInput
-                  name="pais"
-                  placeholder="País"
-                  value={formData.pais}
-                  readOnly
-                  className="mb-3"
-                />
-                <CFormLabel>Estado</CFormLabel>
-                <CFormInput
-                  name="estado"
-                  placeholder="Estado"
-                  value={formData.estado}
-                  readOnly
-                  className="mb-3"
-                />
-                <CFormLabel>Ciudad</CFormLabel>
-                <CFormInput
-                  name="ciudad"
-                  placeholder="Ciudad"
-                  value={formData.ciudad}
-                  readOnly
-                  className="mb-3"
-                />
-                <CFormLabel>Código Postal</CFormLabel>
-                <CFormInput
-                  name="codigoPostal"
-                  placeholder="Código Postal"
-                  value={formData.codigoPostal}
-                  readOnly
-                  className="mb-3"
-                />
-                <CFormLabel>Fecha de Nacimiento</CFormLabel>
-                <CFormInput
-                  name="fechaNacimiento"
-                  placeholder="Fecha de Nacimiento"
-                  type="date"
-                  value={formData.fechaNacimiento}
-                  onChange={handleChange}
-                  className="mb-3"
-                />
-                <CFormLabel>Número de Teléfono</CFormLabel>
-                <CFormInput
-                  name="numeroTelefono"
-                  placeholder="Número de Teléfono"
-                  value={formData.numeroTelefono}
-                  onChange={handleChange}
-                  className="mb-3"
-                />
-                <CFormLabel>Identificación</CFormLabel>
-                <CFormInput
-                  name="identificacion"
-                  placeholder="Identificación"
-                  value={formData.identificacion}
-                  onChange={handleChange}
-                  className="mb-3"
-                />
-                <CFormLabel>Imagen de Perfil</CFormLabel>
-                <CFormInput
-                  name="imagenPerfil"
-                  type="file"
-                  onChange={handleChange}
-                  className="mb-3"
-                />
-                {updateError && (
-                  <CAlert color="danger" className="mb-3">
-                    {updateError.message}
-                  </CAlert>
-                )}
-                <div className="d-grid">
-                  <CButton type="submit" color="success" disabled={isUpdating}>
-                    {isUpdating ? 'Actualizando...' : 'Actualizar'}
-                  </CButton>
-                </div>
-              </CForm>
+              </div>
+              <div>
+                <strong>Latitud: </strong>
+                <span>{position.lat}</span>
+              </div>
+              <div>
+                <strong>Longitud: </strong>
+                <span>{position.lng}</span>
+              </div>
+              <div>
+                <strong>País: </strong>
+                <span>{formData.pais}</span>
+              </div>
+              <div>
+                <strong>Estado: </strong>
+                <span>{formData.estado}</span>
+              </div>
+              <div>
+                <strong>Ciudad: </strong>
+                <span>{formData.ciudad}</span>
+              </div>
+              <div>
+                <strong>Código Postal: </strong>
+                <span>{formData.codigoPostal}</span>
+              </div>
+              <div>
+                <strong>Fecha de Nacimiento: </strong>
+                <span>{formData.fechaNacimiento}</span>
+              </div>
+              <div>
+                <strong>Número de Teléfono: </strong>
+                <span>{formData.numeroTelefono}</span>
+              </div>
+              <div>
+                <strong>Identificación: </strong>
+                <span>{formData.identificacion}</span>
+              </div>
             </CCardBody>
           </CCard>
         </CCol>
@@ -209,4 +111,4 @@ const UserEdit = () => {
   )
 }
 
-export default UserEdit
+export default UserView

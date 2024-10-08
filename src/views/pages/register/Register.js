@@ -15,6 +15,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilFolder, cilLockLocked, cilUser } from '@coreui/icons'
 import useRegisterForm from '../../../hooks/useRegisterForm'
+import '../../../scss/style.scss'
 
 const Register = () => {
   const { formData, error, isLoading, handleChange, handleSubmit } = useRegisterForm()

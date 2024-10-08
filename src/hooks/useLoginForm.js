@@ -27,9 +27,9 @@ const useLoginForm = () => {
       if (data) {
         console.log('Login successful', data)
         if (data.rol === 'admin') {
-          window.location.href = '/admin'
-        } else {
           window.location.href = '/dashboard'
+        } else {
+          window.location.href = '/'
         }
       }
     } catch (err) {
