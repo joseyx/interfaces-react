@@ -1,15 +1,58 @@
-import React from 'react'
-import '../../public/lib/animate/animate.min.css'
-import '../../public/lib/owlcarousel/assets/owl.carousel.min.css'
-import '../../public/css/bootstrap.min.css'
-import '../../public/css/style.css'
+import React, { useEffect, useState } from 'react'
+import '../assets/lib/animate/animate.min.css'
+import '../assets/lib/owlcarousel/assets/owl.carousel.min.css'
+import '../assets/css/bootstrap.min.css'
+import '../assets/css/style.css'
 
 import useLoggedInUser from 'src/hooks/useLoggedInUser'
+import useAjustes from 'src/hooks/useAjustes'
 
 import { logout } from 'src/services/AuthService'
 
 const LandingLayout = () => {
-  const { user, error, isLoading } = useLoggedInUser()
+  const { user, isLoading } = useLoggedInUser()
+  const { ajustes, handleUpdateAjustes } = useAjustes()
+
+  const [fontSizeTitle, setFontSizeTitle] = useState('')
+  const [fontSizeSubtitle, setFontSizeSubtitle] = useState('')
+  const [fontSizeParagraph, setFontSizeParagraph] = useState('')
+  const [primaryColor, setPrimaryColor] = useState('')
+  const [secondaryColor, setSecondaryColor] = useState('')
+  const [tertiaryColor, setTertiaryColor] = useState('')
+  const [fontsFile, setFontsFile] = useState(null)
+
+  useEffect(() => {
+    console.log('ajustes', ajustes)
+  }, [ajustes])
+
+  useEffect(() => {
+    if (ajustes) {
+      setFontSizeTitle(ajustes.font_size_title)
+      setFontSizeSubtitle(ajustes.font_size_subtitle)
+      setFontSizeParagraph(ajustes.font_size_paragraph)
+      setPrimaryColor(ajustes.color_primary)
+      setSecondaryColor(ajustes.color_secondary)
+      setTertiaryColor(ajustes.color_tertiary)
+      setFontsFile(ajustes.fonts_file)
+    }
+  }, [ajustes])
+
+  useEffect(() => {
+    if (fontsFile) {
+      const style = document.createElement('style')
+      style.appendChild(
+        document.createTextNode(`
+          @font-face {
+            font-family: 'CustomFont';
+            src: url('${fontsFile}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
+        `),
+      )
+      document.head.appendChild(style)
+    }
+  }, [fontsFile])
 
   if (isLoading) {
     return <div>Cargando...</div>
@@ -24,38 +67,157 @@ const LandingLayout = () => {
     }
   }
 
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    try {
+      const formData = {
+        font_size_title: fontSizeTitle,
+        font_size_subtitle: fontSizeSubtitle,
+        font_size_paragraph: fontSizeParagraph,
+        color_primary: primaryColor,
+        color_secondary: secondaryColor,
+        color_tertiary: tertiaryColor,
+        font_file: fontsFile,
+      }
+      if (!fontsFile) {
+        delete formData.font_file
+      }
+      await handleUpdateAjustes(formData)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const darkenHexColor = (hex, percent) => {
+    if (!hex) {
+      console.error('Invalid hex color:', hex)
+      return null
+    }
+
+    // Remove the hash at the start if it's there
+    hex = hex.replace('#', '')
+
+    // Parse the r, g, b values
+    let r = parseInt(hex.substring(0, 2), 16)
+    let g = parseInt(hex.substring(2, 4), 16)
+    let b = parseInt(hex.substring(4, 6), 16)
+
+    // Calculate the darkened values
+    r = Math.floor(r * (1 - percent / 100))
+    g = Math.floor(g * (1 - percent / 100))
+    b = Math.floor(b * (1 - percent / 100))
+
+    // Convert back to hex and pad with zeros if necessary
+    r = r.toString(16).padStart(2, '0')
+    g = g.toString(16).padStart(2, '0')
+    b = b.toString(16).padStart(2, '0')
+
+    // Return the darkened color
+    return `#${r}${g}${b}`
+  }
+
+  const lightenHexColor = (hex, percent) => {
+    if (!hex) {
+      console.error('Invalid hex color:', hex)
+      return null
+    }
+    // Remove the hash at the start if it's there
+    hex = hex.replace('#', '')
+
+    // Parse the r, g, b values
+    let r = parseInt(hex.substring(0, 2), 16)
+    let g = parseInt(hex.substring(2, 4), 16)
+    let b = parseInt(hex.substring(4, 6), 16)
+
+    // Calculate the lightened values
+    r = Math.min(255, Math.floor(r * (1 + percent / 100)))
+    g = Math.min(255, Math.floor(g * (1 + percent / 100)))
+    b = Math.min(255, Math.floor(b * (1 + percent / 100)))
+
+    // Convert back to hex and pad with zeros if necessary
+    r = r.toString(16).padStart(2, '0')
+    g = g.toString(16).padStart(2, '0')
+    b = b.toString(16).padStart(2, '0')
+
+    // Return the lightened color
+    return `#${r}${g}${b}`
+  }
+
   return (
-    <div className="landing-layout">
-      <div className="container-fluid bg-primary text-white pt-4 pb-5 d-none d-lg-flex">
+    <div
+      className="landing-layout"
+      style={{
+        backgroundColor: tertiaryColor,
+      }}
+    >
+      <div
+        className="container-fluid text-white pt-4 pb-5 d-none d-lg-flex"
+        style={{
+          backgroundColor: tertiaryColor,
+        }}
+      >
         <div className="container pb-2">
           <div className="d-flex align-items-center justify-content-between">
             <div className="d-flex">
-              <i className="bi bi-telephone-inbound fs-2"></i>
+              <i
+                className="bi bi-telephone-inbound fs-2"
+                style={{
+                  color: secondaryColor,
+                }}
+              ></i>
               <div className="ms-3">
-                <h5 className="text-white mb-0">Call Now</h5>
-                <span>+012 345 6789</span>
+                <h5
+                  className="mb-0"
+                  style={{
+                    color: secondaryColor,
+                  }}
+                >
+                  Call Now
+                </h5>
+                <span
+                  style={{
+                    color: secondaryColor,
+                  }}
+                >
+                  +012 345 6789
+                </span>
               </div>
             </div>
-            <a href="index.html" className="h1 text-white mb-0">
-              Lab<span className="text-dark">sky</span>
+            <a
+              href="index.html"
+              className="h1 mb-0"
+              style={{
+                color: secondaryColor,
+                fontFamily: 'CustomFont',
+              }}
+            >
+              Lab<span style={{ color: darkenHexColor(secondaryColor, 30) }}>sky</span>
             </a>
             <div className="d-flex">
-              <i className="bi bi-envelope fs-2"></i>
+              <i className="bi bi-envelope fs-2" style={{ color: secondaryColor }}></i>
               <div className="ms-3">
-                <h5 className="text-white mb-0">Mail Now</h5>
-                <span>info@example.com</span>
+                <h5 className="mb-0" style={{ color: secondaryColor }}>
+                  Mail Now
+                </h5>
+                <span style={{ color: secondaryColor }}>info@example.com</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container-fluid sticky-top">
+      <div
+        className="container-fluid"
+        style={{
+          backgroundColor: tertiaryColor,
+        }}
+      >
         <div className="container">
-          <nav className="navbar navbar-expand-lg navbar-light bg-white py-lg-0 px-lg-3">
+          {/* Navbar */}
+          <nav className="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-3">
             <a href="index.html" className="navbar-brand d-lg-none">
-              <h1 className="text-primary m-0">
-                Lab<span className="text-dark">sky</span>
+              <h1 className="m-0" style={{ Color: secondaryColor }}>
+                Lab<span style={{ Color: darkenHexColor(secondaryColor, 30) }}>sky</span>
               </h1>
             </a>
             <button
@@ -67,25 +229,62 @@ const LandingLayout = () => {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarCollapse">
-              <div className="navbar-nav">
-                <a href="index.html" className="nav-item nav-link active">
+              <div className="navbar-nav w-100">
+                <a
+                  href="index.html"
+                  className="nav-item nav-link active"
+                  style={{
+                    color: darkenHexColor(secondaryColor, 20),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Home
                 </a>
-                <a href="about.html" className="nav-item nav-link">
+                <a
+                  href=""
+                  className="nav-item nav-link"
+                  style={{
+                    color: darkenHexColor(secondaryColor, 20),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   About
                 </a>
-                <a href="service.html" className="nav-item nav-link">
+                <a
+                  href=""
+                  className="nav-item nav-link"
+                  style={{
+                    color: darkenHexColor(secondaryColor, 20),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Services
                 </a>
                 {user && user.isAdmin && (
-                  <a href="dashboard" className="nav-item nav-link">
+                  <a
+                    href="dashboard"
+                    className="nav-item nav-link"
+                    style={{
+                      color: darkenHexColor(secondaryColor, 20),
+                      fontFamily: 'CustomFont',
+                      fontSize: `${fontSizeParagraph}rem`,
+                    }}
+                  >
                     Dashboard
                   </a>
                 )}
                 {user && (
                   <a
                     className="nav-item nav-link"
-                    style={{ cursor: 'pointer' }}
+                    style={{
+                      cursor: 'pointer',
+                      color: darkenHexColor(secondaryColor, 20),
+                      fontFamily: 'CustomFont',
+                      fontSize: `${fontSizeParagraph}rem`,
+                    }}
                     onClick={() => {
                       handleLogout()
                     }}
@@ -94,57 +293,222 @@ const LandingLayout = () => {
                   </a>
                 )}
                 {!user && (
-                  <a href="login" className="nav-item nav-link">
-                    Iniciar Sesion
-                  </a>
-                )}
-                {!user && (
-                  <a href="register" className="nav-item nav-link">
-                    Registrarse
-                  </a>
+                  <>
+                    <a
+                      href="login"
+                      className="nav-item nav-link"
+                      style={{
+                        color: darkenHexColor(secondaryColor, 20),
+                        fontFamily: 'CustomFont',
+                        fontSize: `${fontSizeParagraph}rem`,
+                      }}
+                    >
+                      Iniciar Sesion
+                    </a>
+                    <a
+                      href="register"
+                      className="nav-item nav-link"
+                      style={{
+                        color: darkenHexColor(secondaryColor, 20),
+                        fontFamily: 'CustomFont',
+                        fontSize: `${fontSizeParagraph}rem`,
+                      }}
+                    >
+                      Registrarse
+                    </a>
+                  </>
                 )}
                 <div className="nav-item dropdown">
-                  <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                  <a
+                    href="#"
+                    className="nav-link dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    style={{
+                      color: darkenHexColor(secondaryColor, 20),
+                      fontFamily: 'CustomFont',
+                      fontSize: `${fontSizeParagraph}rem`,
+                    }}
+                  >
                     Pages
                   </a>
-                  <div className="dropdown-menu bg-light m-0">
-                    <a href="feature.html" className="dropdown-item">
+                  <div className="dropdown-menu m-0" style={{ backgroundColor: tertiaryColor }}>
+                    <a href="" className="dropdown-item">
                       Features
                     </a>
-                    <a href="team.html" className="dropdown-item">
+                    <a href="" className="dropdown-item">
                       Our Team
                     </a>
-                    <a href="testimonial.html" className="dropdown-item">
+                    <a href="" className="dropdown-item">
                       Testimonial
                     </a>
-                    <a href="appoinment.html" className="dropdown-item">
+                    <a href="" className="dropdown-item">
                       Appoinment
                     </a>
-                    <a href="404.html" className="dropdown-item">
+                    <a href="" className="dropdown-item">
                       404 Page
                     </a>
                   </div>
                 </div>
-                <a href="contact.html" className="nav-item nav-link">
+                <a
+                  href=""
+                  className="nav-item nav-link"
+                  style={{
+                    color: darkenHexColor(secondaryColor, 20),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Contact
                 </a>
               </div>
+
+              {/* Social media icons on the right */}
               <div className="ms-auto d-none d-lg-flex">
-                <a className="btn btn-sm-square btn-primary ms-2" href="">
-                  <i className="fab fa-facebook-f"></i>
+                <a
+                  className="btn btn-sm-square btn-primary ms-2"
+                  href=""
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-facebook-f" style={{ color: secondaryColor }}></i>
                 </a>
-                <a className="btn btn-sm-square btn-primary ms-2" href="">
-                  <i className="fab fa-twitter"></i>
+                <a
+                  className="btn btn-sm-square btn-primary ms-2"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-twitter" style={{ color: secondaryColor }}></i>
                 </a>
-                <a className="btn btn-sm-square btn-primary ms-2" href="">
-                  <i className="fab fa-linkedin-in"></i>
+                <a
+                  className="btn btn-sm-square btn-primary ms-2"
+                  href=""
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-linkedin-in" style={{ color: secondaryColor }}></i>
                 </a>
-                <a className="btn btn-sm-square btn-primary ms-2" href="">
-                  <i className="fab fa-youtube"></i>
+                <a
+                  className="btn btn-sm-square btn-primary ms-2"
+                  href=""
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-youtube" style={{ color: secondaryColor }}></i>
                 </a>
               </div>
             </div>
           </nav>
+
+          {/* Form */}
+          <div className="container my-3" onSubmit={handleSubmit}>
+            <form className="d-block">
+              <div className="row">
+                <div className="col">
+                  <input
+                    type="number"
+                    className="form-control mb-2"
+                    placeholder="Subtitle size"
+                    value={fontSizeSubtitle}
+                    onChange={(e) => setFontSizeSubtitle(e.target.value)}
+                    style={{
+                      backgroundColor: darkenHexColor(tertiaryColor, 20),
+                      color: secondaryColor,
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <input
+                    type="number"
+                    className="form-control mb-2"
+                    placeholder="Paragraph size"
+                    value={fontSizeParagraph}
+                    onChange={(e) => setFontSizeParagraph(e.target.value)}
+                    style={{
+                      backgroundColor: darkenHexColor(tertiaryColor, 20),
+                      color: secondaryColor,
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <input
+                    type="number"
+                    className="form-control mb-2"
+                    placeholder="Title size"
+                    value={fontSizeTitle}
+                    onChange={(e) => setFontSizeTitle(e.target.value)}
+                    style={{
+                      backgroundColor: darkenHexColor(tertiaryColor, 20),
+                      color: secondaryColor,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <input
+                    type="color"
+                    className="form-control mb-2"
+                    title="Choose primary color"
+                    value={primaryColor}
+                    onChange={(e) => setPrimaryColor(e.target.value)}
+                    style={{
+                      backgroundColor: darkenHexColor(tertiaryColor, 20),
+                      color: secondaryColor,
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <input
+                    type="color"
+                    className="form-control mb-2"
+                    title="Choose secondary color"
+                    value={secondaryColor}
+                    onChange={(e) => setSecondaryColor(e.target.value)}
+                    style={{
+                      backgroundColor: darkenHexColor(tertiaryColor, 20),
+                      color: secondaryColor,
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <input
+                    type="color"
+                    className="form-control mb-2"
+                    title="Choose title color"
+                    value={tertiaryColor}
+                    onChange={(e) => setTertiaryColor(e.target.value)}
+                    style={{
+                      backgroundColor: darkenHexColor(tertiaryColor, 20),
+                      color: secondaryColor,
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <input
+                    type="file"
+                    className="form-control mb-2"
+                    title="Choose fonts file"
+                    accept=".ttf"
+                    onChange={(e) => setFontsFile(e.target.files[0])}
+                    style={{
+                      backgroundColor: darkenHexColor(tertiaryColor, 20),
+                      color: secondaryColor,
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Save Button with proper background */}
+              <div className="text-center pb-4">
+                <button
+                  type="submit"
+                  className="btn btn-primary mt-2"
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: secondaryColor,
+                  }} /* Same as navbar color */
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -157,15 +521,37 @@ const LandingLayout = () => {
                 <div className="container">
                   <div className="row justify-content-start">
                     <div className="col-lg-7 text-start">
-                      <h1 className="display-1 text-white animated slideInRight mb-3">
+                      <h1
+                        className="display-1 animated slideInRight mb-3"
+                        style={{
+                          color: secondaryColor,
+                          fontFamily: 'CustomFont',
+                          fontSize: `${fontSizeTitle}rem`,
+                        }}
+                      >
                         Award Winning Laboratory Center
                       </h1>
-                      <p className="mb-5 animated slideInRight">
+                      <p
+                        className="mb-5 animated slideInRight"
+                        style={{
+                          color: secondaryColor,
+                          fontFamily: 'CustomFont',
+                          fontSize: `${fontSizeParagraph}rem`,
+                        }}
+                      >
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus
                         augue, iaculis id elit eget, ultrices pulvinar tortor. Quisque vel lorem
                         porttitor, malesuada arcu quis, fringilla risus.
                       </p>
-                      <a href="" className="btn btn-primary py-3 px-5 animated slideInRight">
+                      <a
+                        href=""
+                        className="btn btn-primary py-3 px-5 animated slideInRight"
+                        style={{
+                          color: secondaryColor,
+                          backgroundColor: primaryColor,
+                          fontFamily: 'CustomFont',
+                        }}
+                      >
                         Explore More
                       </a>
                     </div>
@@ -179,15 +565,38 @@ const LandingLayout = () => {
                 <div className="container">
                   <div className="row justify-content-end">
                     <div className="col-lg-7 text-end">
-                      <h1 className="display-1 text-white animated slideInLeft mb-3">
+                      <h1
+                        className="display-1 animated slideInLeft mb-3"
+                        style={{
+                          color: secondaryColor,
+                          fontFamily: 'CustomFont',
+                          fontSize: `${fontSizeTitle}rem`,
+                        }}
+                      >
                         Expet Doctors & Lab Assistants
                       </h1>
-                      <p className="mb-5 animated slideInLeft">
+                      <p
+                        className="mb-5 animated slideInLeft"
+                        style={{
+                          color: secondaryColor,
+                          fontFamily: 'CustomFont',
+                          fontSize: `${fontSizeParagraph}rem`,
+                        }}
+                      >
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus
                         augue, iaculis id elit eget, ultrices pulvinar tortor. Quisque vel lorem
                         porttitor, malesuada arcu quis, fringilla risus.
                       </p>
-                      <a href="" className="btn btn-primary py-3 px-5 animated slideInLeft">
+                      <a
+                        href=""
+                        className="btn btn-primary py-3 px-5 animated slideInLeft"
+                        style={{
+                          color: secondaryColor,
+                          backgroundColor: primaryColor,
+                          fontFamily: 'CustomFont',
+                          fontSize: `${fontSizeParagraph}rem`,
+                        }}
+                      >
                         Explore More
                       </a>
                     </div>
@@ -234,19 +643,44 @@ const LandingLayout = () => {
                 <div className="col-6">
                   <div className="bg-primary w-100 h-100 mt-n5 ms-n5 d-flex flex-column align-items-center justify-content-center">
                     <div className="icon-box-light">
-                      <i className="bi bi-award text-dark"></i>
+                      <i className="bi bi-award" style={{ color: primaryColor }}></i>
                     </div>
-                    <h1 className="display-1 text-white mb-0" data-toggle="counter-up">
+                    <h1
+                      className="display-1 mb-0"
+                      data-toggle="counter-up"
+                      style={{ color: secondaryColor, fontFamily: 'CustomFont' }}
+                    >
                       25
                     </h1>
-                    <small className="fs-5 text-white">Years Experience</small>
+                    <small
+                      className="fs-5"
+                      style={{ color: secondaryColor, fontFamily: 'CustomFont' }}
+                    >
+                      Years Experience
+                    </small>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-              <h1 className="display-6 mb-4">Trusted Lab Experts and Latest Lab Technologies</h1>
-              <p className="mb-4">
+              <h1
+                className="display-6 mb-4"
+                style={{
+                  color: secondaryColor,
+                  fontFamily: 'CustomFont',
+                  fontSize: `${fontSizeSubtitle}rem`,
+                }}
+              >
+                Trusted Lab Experts and Latest Lab Technologies
+              </h1>
+              <p
+                className="mb-4"
+                style={{
+                  color: secondaryColor,
+                  fontFamily: 'CustomFont',
+                  fontSize: `${fontSizeParagraph}rem`,
+                }}
+              >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue,
                 iaculis id elit eget, ultrices pulvinar tortor. Quisque vel lorem porttitor,
                 malesuada arcu quis, fringilla risus. Pellentesque eu consequat augue.
@@ -254,24 +688,30 @@ const LandingLayout = () => {
               <div className="row g-4 g-sm-5 justify-content-center">
                 <div className="col-sm-6">
                   <div className="about-fact btn-square flex-column rounded-circle bg-primary ms-sm-auto">
-                    <p className="text-white mb-0">Awards Winning</p>
-                    <h1 className="text-white mb-0" data-toggle="counter-up">
+                    <p className="mb-0" style={{ color: secondaryColor }}>
+                      Awards Winning
+                    </p>
+                    <h1 className="mb-0" data-toggle="counter-up" style={{ color: secondaryColor }}>
                       9999
                     </h1>
                   </div>
                 </div>
                 <div className="col-sm-6 text-start">
                   <div className="about-fact btn-square flex-column rounded-circle bg-secondary me-sm-auto">
-                    <p className="text-white mb-0">Complete Cases</p>
-                    <h1 className="text-white mb-0" data-toggle="counter-up">
+                    <p className="mb-0" style={{ color: secondaryColor }}>
+                      Complete Cases
+                    </p>
+                    <h1 className="mb-0" data-toggle="counter-up" style={{ color: secondaryColor }}>
                       9999
                     </h1>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="about-fact mt-n130 btn-square flex-column rounded-circle bg-dark mx-sm-auto">
-                    <p className="text-white mb-0">Happy Clients</p>
-                    <h1 className="text-white mb-0" data-toggle="counter-up">
+                    <p className="mb-0" style={{ color: secondaryColor }}>
+                      Happy Clients
+                    </p>
+                    <h1 className="mb-0" data-toggle="counter-up" style={{ color: secondaryColor }}>
                       9999
                     </h1>
                   </div>
@@ -286,96 +726,133 @@ const LandingLayout = () => {
         <div className="container">
           <div className="row g-0 feature-row">
             <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
-              <div className="feature-item border h-100 p-5">
+              <div
+                className="feature-item border h-100 p-5"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-award text-dark"></i>
+                  <i
+                    className="bi bi-award"
+                    style={{ color: lightenHexColor(primaryColor, 50) }}
+                  ></i>
                 </div>
-                <h5 className="mb-3">Award Winning</h5>
-                <p className="mb-0">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Award Winning
+                </h5>
+                <p
+                  className="mb-0"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
               </div>
             </div>
             <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
-              <div className="feature-item border h-100 p-5">
+              <div
+                className="feature-item border h-100 p-5"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-people text-dark"></i>
+                  <i
+                    className="bi bi-people"
+                    style={{ color: lightenHexColor(primaryColor, 50) }}
+                  ></i>
                 </div>
-                <h5 className="mb-3">Expet Doctors</h5>
-                <p className="mb-0">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Expet Doctors
+                </h5>
+                <p
+                  className="mb-0"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
               </div>
             </div>
             <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
-              <div className="feature-item border h-100 p-5">
+              <div
+                className="feature-item border h-100 p-5"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-cash-coin text-dark"></i>
+                  <i
+                    className="bi bi-cash-coin"
+                    style={{ color: lightenHexColor(primaryColor, 50) }}
+                  ></i>
                 </div>
-                <h5 className="mb-3">Fair Prices</h5>
-                <p className="mb-0">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Fair Prices
+                </h5>
+                <p
+                  className="mb-0"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
               </div>
             </div>
             <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
-              <div className="feature-item border h-100 p-5">
+              <div
+                className="feature-item border h-100 p-5"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-headphones text-dark"></i>
+                  <i
+                    className="bi bi-headphones"
+                    style={{ color: lightenHexColor(primaryColor, 50) }}
+                  ></i>
                 </div>
-                <h5 className="mb-3">24/7 Support</h5>
-                <p className="mb-0">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container-fluid py-5">
-        <div className="container">
-          <div className="row g-0 feature-row">
-            <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
-              <div className="feature-item border h-100 p-5">
-                <div className="icon-box-primary mb-4">
-                  <i className="bi bi-award text-dark"></i>
-                </div>
-                <h5 className="mb-3">Award Winning</h5>
-                <p className="mb-0">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
-              <div className="feature-item border h-100 p-5">
-                <div className="icon-box-primary mb-4">
-                  <i className="bi bi-people text-dark"></i>
-                </div>
-                <h5 className="mb-3">Expet Doctors</h5>
-                <p className="mb-0">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
-              <div className="feature-item border h-100 p-5">
-                <div className="icon-box-primary mb-4">
-                  <i className="bi bi-cash-coin text-dark"></i>
-                </div>
-                <h5 className="mb-3">Fair Prices</h5>
-                <p className="mb-0">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
-              <div className="feature-item border h-100 p-5">
-                <div className="icon-box-primary mb-4">
-                  <i className="bi bi-headphones text-dark"></i>
-                </div>
-                <h5 className="mb-3">24/7 Support</h5>
-                <p className="mb-0">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  24/7 Support
+                </h5>
+                <p
+                  className="mb-0"
+                  style={{
+                    color: lightenHexColor(secondaryColor, 30),
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
               </div>
@@ -388,11 +865,32 @@ const LandingLayout = () => {
         <div className="container">
           <div className="row g-0">
             <div className="col-lg-6 pt-lg-5">
-              <div className="bg-white p-5 mt-lg-5">
-                <h1 className="display-6 mb-4 wow fadeIn" data-wow-delay="0.3s">
+              <div
+                className="p-5 mt-lg-5"
+                style={{
+                  backgroundColor: tertiaryColor,
+                }}
+              >
+                <h1
+                  className="display-6 mb-4 wow fadeIn"
+                  data-wow-delay="0.3s"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeSubtitle}rem`,
+                  }}
+                >
                   The Best Medical Test & Laboratory Solution
                 </h1>
-                <p className="mb-4 wow fadeIn" data-wow-delay="0.4s">
+                <p
+                  className="mb-4 wow fadeIn"
+                  data-wow-delay="0.4s"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue,
                   iaculis id elit eget, ultrices pulvinar tortor. Quisque vel lorem porttitor,
                   malesuada arcu quis, fringilla risus. Pellentesque eu consequat augue.
@@ -400,20 +898,56 @@ const LandingLayout = () => {
                 <div className="row g-5 pt-2 mb-5">
                   <div className="col-sm-6 wow fadeIn" data-wow-delay="0.3s">
                     <div className="icon-box-primary mb-4">
-                      <i className="bi bi-person-plus text-dark"></i>
+                      <i
+                        className="bi bi-person-plus"
+                        style={{ color: lightenHexColor(primaryColor, 50) }}
+                      ></i>
                     </div>
-                    <h5 className="mb-3">Experience Doctors</h5>
-                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+                    <h5 className="mb-3" style={{ color: secondaryColor }}>
+                      Experience Doctors
+                    </h5>
+                    <span
+                      style={{
+                        color: secondaryColor,
+                        fontFamily: 'CustomFont',
+                        fontSize: `${fontSizeParagraph}rem`,
+                      }}
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    </span>
                   </div>
                   <div className="col-sm-6 wow fadeIn" data-wow-delay="0.4s">
                     <div className="icon-box-primary mb-4">
-                      <i className="bi bi-check-all text-dark"></i>
+                      <i
+                        className="bi bi-check-all"
+                        style={{ color: lightenHexColor(primaryColor, 50) }}
+                      ></i>
                     </div>
-                    <h5 className="mb-3">Advanced Microscopy</h5>
-                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+                    <h5 className="mb-3" style={{ color: secondaryColor }}>
+                      Advanced Microscopy
+                    </h5>
+                    <span
+                      style={{
+                        color: secondaryColor,
+                        fontFamily: 'CustomFont',
+                        fontSize: `${fontSizeParagraph}rem`,
+                      }}
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    </span>
                   </div>
                 </div>
-                <a className="btn btn-primary py-3 px-5 wow fadeIn" data-wow-delay="0.5s" href="">
+                <a
+                  className="btn btn-primary py-3 px-5 wow fadeIn"
+                  data-wow-delay="0.5s"
+                  href=""
+                  style={{
+                    color: secondaryColor,
+                    backgroundColor: primaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Explore More
                 </a>
               </div>
@@ -440,8 +974,24 @@ const LandingLayout = () => {
                   <div className="bg-primary p-5">
                     <div className="experience mb-4 wow fadeIn" data-wow-delay="0.3s">
                       <div className="d-flex justify-content-between mb-2">
-                        <span className="text-white">Sample Preparation</span>
-                        <span className="text-white">90%</span>
+                        <span
+                          style={{
+                            color: secondaryColor,
+                            fontFamily: 'CustomFont',
+                            fontSize: `${fontSizeParagraph}rem`,
+                          }}
+                        >
+                          Sample Preparation
+                        </span>
+                        <span
+                          style={{
+                            color: secondaryColor,
+                            fontFamily: 'CustomFont',
+                            fontSize: `${fontSizeParagraph}rem`,
+                          }}
+                        >
+                          90%
+                        </span>
                       </div>
                       <div className="progress">
                         <div
@@ -455,8 +1005,24 @@ const LandingLayout = () => {
                     </div>
                     <div className="experience mb-4 wow fadeIn" data-wow-delay="0.4s">
                       <div className="d-flex justify-content-between mb-2">
-                        <span className="text-white">Result Accuracy</span>
-                        <span className="text-white">95%</span>
+                        <span
+                          style={{
+                            color: secondaryColor,
+                            fontFamily: 'CustomFont',
+                            fontSize: `${fontSizeParagraph}rem`,
+                          }}
+                        >
+                          Result Accuracy
+                        </span>
+                        <span
+                          style={{
+                            color: secondaryColor,
+                            fontFamily: 'CustomFont',
+                            fontSize: `${fontSizeParagraph}rem`,
+                          }}
+                        >
+                          95%
+                        </span>
                       </div>
                       <div className="progress">
                         <div
@@ -470,8 +1036,24 @@ const LandingLayout = () => {
                     </div>
                     <div className="experience mb-0 wow fadeIn" data-wow-delay="0.5s">
                       <div className="d-flex justify-content-between mb-2">
-                        <span className="text-white">Lab Equipments</span>
-                        <span className="text-white">90%</span>
+                        <span
+                          style={{
+                            color: secondaryColor,
+                            fontFamily: 'CustomFont',
+                            fontSize: `${fontSizeParagraph}rem`,
+                          }}
+                        >
+                          Lab Equipments
+                        </span>
+                        <span
+                          style={{
+                            color: secondaryColor,
+                            fontFamily: 'CustomFont',
+                            fontSize: `${fontSizeParagraph}rem`,
+                          }}
+                        >
+                          90%
+                        </span>
                       </div>
                       <div className="progress">
                         <div
@@ -498,121 +1080,326 @@ const LandingLayout = () => {
             data-wow-delay="0.1s"
             style={{ maxWidth: '600px' }}
           >
-            <h1 className="display-6 mb-3">Reliable & High-Quality Laboratory Service</h1>
-            <p className="mb-5">
+            <h1
+              className="display-6 mb-3"
+              style={{
+                color: secondaryColor,
+                fontFamily: 'CustomFont',
+                fontSize: `${fontSizeSubtitle}rem`,
+              }}
+            >
+              Reliable & High-Quality Laboratory Service
+            </h1>
+            <p
+              className="mb-5"
+              style={{
+                color: secondaryColor,
+                fontFamily: 'CustomFont',
+                fontSize: `${fontSizeParagraph}rem`,
+              }}
+            >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue,
               iaculis id elit eget, ultrices pulvinar tortor.
             </p>
           </div>
           <div className="row g-4">
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-heart-pulse text-dark"></i>
+                  <i className="bi bi-heart-pulse" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Pathology Testing</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Pathology Testing
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
-                  Read More<i className="bi bi-chevron-double-right ms-1"></i>
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
+                  Read More
+                  <i
+                    className="bi bi-chevron-double-right ms-1"
+                    style={{ color: primaryColor }}
+                  ></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-lungs text-dark"></i>
+                  <i className="bi bi-lungs" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Microbiology Tests</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Microbiology Tests
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
                   Read More<i className="bi bi-chevron-double-right ms-1"></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-virus text-dark"></i>
+                  <i className="bi bi-virus" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Biochemistry Tests</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Biochemistry Tests
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
                   Read More<i className="bi bi-chevron-double-right ms-1"></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-capsule-pill text-dark"></i>
+                  <i className="bi bi-capsule-pill" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Histopatology Tests</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Histopatology Tests
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
                   Read More<i className="bi bi-chevron-double-right ms-1"></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-capsule text-dark"></i>
+                  <i className="bi bi-capsule" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Urine Tests</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Urine Tests
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
                   Read More<i className="bi bi-chevron-double-right ms-1"></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-prescription2 text-dark"></i>
+                  <i className="bi bi-prescription2" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Blood Tests</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Blood Tests
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
                   Read More<i className="bi bi-chevron-double-right ms-1"></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-clipboard2-pulse text-dark"></i>
+                  <i className="bi bi-clipboard2-pulse" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Fever Tests</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Fever Tests
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
                   Read More<i className="bi bi-chevron-double-right ms-1"></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-              <div className="service-item">
+              <div
+                className="service-item"
+                style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+              >
                 <div className="icon-box-primary mb-4">
-                  <i className="bi bi-file-medical text-dark"></i>
+                  <i className="bi bi-file-medical" style={{ color: primaryColor }}></i>
                 </div>
-                <h5 className="mb-3">Allergy Tests</h5>
-                <p className="mb-4">
+                <h5
+                  className="mb-3"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
+                  Allergy Tests
+                </h5>
+                <p
+                  className="mb-4"
+                  style={{
+                    color: secondaryColor,
+                    fontFamily: 'CustomFont',
+                    fontSize: `${fontSizeParagraph}rem`,
+                  }}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue.
                 </p>
-                <a className="btn btn-light px-3" href="">
+                <a
+                  className="btn btn-light px-3"
+                  href=""
+                  style={{ color: secondaryColor, backgroundColor: primaryColor }}
+                >
                   Read More<i className="bi bi-chevron-double-right ms-1"></i>
                 </a>
               </div>
@@ -629,78 +1416,147 @@ const LandingLayout = () => {
           <div className="row g-5 py-5">
             <div className="col-lg-6 pe-lg-5">
               <a href="index.html" className="navbar-brand">
-                <h1 className="h1 text-primary mb-0">
-                  Lab<span className="text-white">sky</span>
+                <h1 className="h1 mb-0" style={{ color: secondaryColor }}>
+                  Lab<span style={{ color: darkenHexColor(secondaryColor, 30) }}>sky</span>
                 </h1>
               </a>
-              <p className="fs-5 mb-4">
+              <p
+                className="mb-4"
+                style={{
+                  color: darkenHexColor(secondaryColor, 30),
+                  fontFamily: 'CustomFont',
+                  fontSize: `${fontSizeParagraph}rem`,
+                }}
+              >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue,
                 iaculis id elit eget, ultrices pulvinar tortor.
               </p>
-              <p>
+              <p style={{ color: darkenHexColor(secondaryColor, 30) }}>
                 <i className="fa fa-map-marker-alt me-2"></i>123 Street, New York, USA
               </p>
-              <p>
+              <p style={{ color: darkenHexColor(secondaryColor, 30) }}>
                 <i className="fa fa-phone-alt me-2"></i>+012 345 67890
               </p>
-              <p>
+              <p style={{ color: darkenHexColor(secondaryColor, 30) }}>
                 <i className="fa fa-envelope me-2"></i>info@example.com
               </p>
               <div className="d-flex mt-4">
-                <a className="btn btn-lg-square btn-primary me-2" href="#">
-                  <i className="fab fa-twitter"></i>
+                <a
+                  className="btn btn-lg-square btn-primary me-2"
+                  href="#"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-twitter" style={{ color: secondaryColor }}></i>
                 </a>
-                <a className="btn btn-lg-square btn-primary me-2" href="#">
-                  <i className="fab fa-facebook-f"></i>
+                <a
+                  className="btn btn-lg-square btn-primary me-2"
+                  href="#"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-facebook-f" style={{ color: secondaryColor }}></i>
                 </a>
-                <a className="btn btn-lg-square btn-primary me-2" href="#">
-                  <i className="fab fa-linkedin-in"></i>
+                <a
+                  className="btn btn-lg-square btn-primary me-2"
+                  href="#"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-linkedin-in" style={{ color: secondaryColor }}></i>
                 </a>
-                <a className="btn btn-lg-square btn-primary me-2" href="#">
-                  <i className="fab fa-instagram"></i>
+                <a
+                  className="btn btn-lg-square btn-primary me-2"
+                  href="#"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <i className="fab fa-instagram" style={{ color: secondaryColor }}></i>
                 </a>
               </div>
             </div>
             <div className="col-lg-6 ps-lg-5">
               <div className="row g-5">
                 <div className="col-sm-6">
-                  <h4 className="text-light mb-4">Quick Links</h4>
-                  <a className="btn btn-link" href="">
+                  <h4 className="mb-4" style={{ color: secondaryColor }}>
+                    Quick Links
+                  </h4>
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     About Us
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Contact Us
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Our Services
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Terms & Condition
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Support
                   </a>
                 </div>
                 <div className="col-sm-6">
-                  <h4 className="text-light mb-4">Popular Links</h4>
-                  <a className="btn btn-link" href="">
+                  <h4 className="mb-4" style={{ color: secondaryColor }}>
+                    Popular Links
+                  </h4>
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     About Us
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Contact Us
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Our Services
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Terms & Condition
                   </a>
-                  <a className="btn btn-link" href="">
+                  <a
+                    className="btn btn-link"
+                    href=""
+                    style={{ color: darkenHexColor(secondaryColor, 30) }}
+                  >
                     Support
                   </a>
                 </div>
                 <div className="col-sm-12">
-                  <h4 className="text-light mb-4">Newsletter</h4>
+                  <h4 className="mb-4" style={{ color: secondaryColor }}>
+                    Newsletter
+                  </h4>
                   <div className="w-100">
                     <div className="input-group">
                       <input
@@ -709,7 +1565,12 @@ const LandingLayout = () => {
                         style={{ background: 'rgba(255, 255, 255, .1)' }}
                         placeholder="Your Email Address"
                       />
-                      <button className="btn btn-primary px-4">Sign Up</button>
+                      <button
+                        className="btn btn-primary px-4"
+                        style={{ backgroundColor: primaryColor, color: secondaryColor }}
+                      >
+                        Sign Up
+                      </button>
                     </div>
                   </div>
                 </div>

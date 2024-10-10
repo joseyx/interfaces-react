@@ -3,9 +3,34 @@ import { useState, useEffect } from 'react'
 import { getUserById } from '../services/UserService'
 
 const useUser = (id) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState({
+    id: '',
+    email: '',
+    rol: '',
+    username: '',
+    firstName: '',
+    lastName: '',
+    age: '',
+    antiguedad: '',
+    genero: '',
+    pais: '',
+    estado: '',
+    ciudad: '',
+    codigoPostal: '',
+    latitud: 0,
+    longitud: 0,
+    fechaNacimiento: null,
+    fechaRegistro: null,
+    numeroTelefono: '',
+    identificacion: '',
+    imagenPerfil: null,
+    imagenPerfilBig: null,
+    imagenPerfilMedium: null,
+    imagenPerfilMini: null,
+  })
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [position, setPosition] = useState({ lat: 51.505, lng: -0.09 })
 
   useEffect(() => {
     let isMounted = true
@@ -42,6 +67,10 @@ const useUser = (id) => {
           }
 
           setUser(formattedUser)
+          setPosition({
+            lat: data.profile.latitud || 51.505,
+            lng: data.profile.longitud || -0.09,
+          })
         }
       } catch (err) {
         if (isMounted) {
@@ -61,7 +90,7 @@ const useUser = (id) => {
     }
   }, [id])
 
-  return { user, error, isLoading }
+  return { user, error, isLoading, position }
 }
 
 export default useUser

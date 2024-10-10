@@ -1,13 +1,25 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardFooter,
+  CCardHeader,
+  CCol,
+  CContainer,
+  CRow,
+} from '@coreui/react'
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import useUpdateForm from 'src/hooks/useUpdateForm'
+import { useNavigate } from 'react-router-dom'
+import useUser from 'src/hooks/useUser'
+import { traducirRol } from 'src/utils/traducirRol'
 
 const UserView = () => {
   const { id } = useParams()
-  const { formData, fetchError, isFetching, position } = useUpdateForm(id)
+  const { user, error, isLoading, position } = useUser(id)
+  const navigate = useNavigate()
 
   // eslint-disable-next-line react/prop-types
   const LocationMarker = ({ position }) => {
@@ -22,12 +34,16 @@ const UserView = () => {
     return position ? <Marker position={position}></Marker> : null
   }
 
-  if (isFetching) {
+  const handleEdit = () => {
+    navigate(`/dashboard/user/edit/${id}`)
+  }
+
+  if (isLoading) {
     return <div>Cargando...</div>
   }
 
-  if (fetchError) {
-    return <div>Error: {fetchError}</div>
+  if (error) {
+    return <div>Error: {error}</div>
   }
 
   return (
@@ -41,15 +57,27 @@ const UserView = () => {
             <CCardBody className="p-4">
               <div>
                 <strong>Nombre: </strong>
-                <span>{formData.firstName}</span>
+                <span>{user.firstName}</span>
               </div>
               <div>
                 <strong>Apellido: </strong>
-                <span>{formData.lastName}</span>
+                <span>{user.lastName}</span>
               </div>
               <div>
                 <strong>Email: </strong>
-                <span>{formData.email}</span>
+                <span>{user.email}</span>
+              </div>
+              <div>
+                <strong>Genero: </strong>
+                <span>{user.genero}</span>
+              </div>
+              <div>
+                <strong>Identificación: </strong>
+                <span>{user.identificacion}</span>
+              </div>
+              <div>
+                <strong>Rol: </strong>
+                <span>{traducirRol(user.rol)}</span>
               </div>
               <div>
                 <strong>Ubicación: </strong>
@@ -77,33 +105,54 @@ const UserView = () => {
               </div>
               <div>
                 <strong>País: </strong>
-                <span>{formData.pais}</span>
+                <span>{user.pais}</span>
               </div>
               <div>
                 <strong>Estado: </strong>
-                <span>{formData.estado}</span>
+                <span>{user.estado}</span>
               </div>
               <div>
                 <strong>Ciudad: </strong>
-                <span>{formData.ciudad}</span>
+                <span>{user.ciudad}</span>
               </div>
               <div>
                 <strong>Código Postal: </strong>
-                <span>{formData.codigoPostal}</span>
+                <span>{user.codigoPostal}</span>
               </div>
               <div>
                 <strong>Fecha de Nacimiento: </strong>
-                <span>{formData.fechaNacimiento}</span>
+                <span>{user.fechaNacimiento}</span>
+              </div>
+              <div>
+                <strong>Edad: </strong>
+                <span>{user.age}</span>
+              </div>
+              <div>
+                <strong>Fecha de Registro: </strong>
+                <span>{user.fechaRegistro}</span>
+              </div>
+              <div>
+                <strong>Antiguedad (dias): </strong>
+                <span>{user.antiguedad}</span>
               </div>
               <div>
                 <strong>Número de Teléfono: </strong>
-                <span>{formData.numeroTelefono}</span>
+                <span>{user.numeroTelefono}</span>
               </div>
               <div>
                 <strong>Identificación: </strong>
-                <span>{formData.identificacion}</span>
+                <span>{user.identificacion}</span>
               </div>
             </CCardBody>
+            <CCardFooter>
+              <CRow>
+                <CCol>
+                  <CButton color="primary" onClick={() => handleEdit(user.id)}>
+                    Editar
+                  </CButton>
+                </CCol>
+              </CRow>
+            </CCardFooter>
           </CCard>
         </CCol>
       </CRow>

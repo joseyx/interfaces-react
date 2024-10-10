@@ -35,7 +35,7 @@ const UserEdit = () => {
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng
-        handleMapClick(lat, lng)
+        handleMapClick(lat, lng).then((r) => console.log(r))
       },
     })
 
