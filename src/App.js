@@ -3,6 +3,7 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import { CSpinner, useColorModes } from '@coreui/react'
+import Tangram from 'src/layout/tangram'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -44,6 +45,7 @@ const App = () => {
           <Route exact path="/register" name="Register Page" element={<Register />} />
           <Route exact path="/404" name="Page 404" element={<Page404 />} />
           <Route exact path="/" name="Home" element={<LandingLayout />} />
+          <Route exact path="/tangram" name="Tangram" element={<Tangram />} />
           <Route path="*" name="Dashboard" element={<DefaultLayout />} />
           {/*<Route path="*" name="Page 404" element={<Page404 />} />*/}
         </Routes>

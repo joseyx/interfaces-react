@@ -8,6 +8,7 @@ import useLoggedInUser from 'src/hooks/useLoggedInUser'
 import useAjustes from 'src/hooks/useAjustes'
 
 import { logout } from 'src/services/AuthService'
+import Tangram from 'src/layout/tangram'
 
 const LandingLayout = () => {
   const { user, isLoading } = useLoggedInUser()
@@ -329,11 +330,11 @@ const LandingLayout = () => {
                       fontSize: `${fontSizeParagraph}rem`,
                     }}
                   >
-                    Pages
+                    Paginas
                   </a>
                   <div className="dropdown-menu m-0" style={{ backgroundColor: tertiaryColor }}>
-                    <a href="" className="dropdown-item">
-                      Features
+                    <a href="tangram" className="dropdown-item">
+                      Tangrama
                     </a>
                     <a href="" className="dropdown-item">
                       Our Team
@@ -1415,61 +1416,7 @@ const LandingLayout = () => {
         <div className="container">
           <div className="row g-5 py-5">
             <div className="col-lg-6 pe-lg-5">
-              <a href="index.html" className="navbar-brand">
-                <h1 className="h1 mb-0" style={{ color: secondaryColor }}>
-                  Lab<span style={{ color: darkenHexColor(secondaryColor, 30) }}>sky</span>
-                </h1>
-              </a>
-              <p
-                className="mb-4"
-                style={{
-                  color: darkenHexColor(secondaryColor, 30),
-                  fontFamily: 'CustomFont',
-                  fontSize: `${fontSizeParagraph}rem`,
-                }}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tellus augue,
-                iaculis id elit eget, ultrices pulvinar tortor.
-              </p>
-              <p style={{ color: darkenHexColor(secondaryColor, 30) }}>
-                <i className="fa fa-map-marker-alt me-2"></i>123 Street, New York, USA
-              </p>
-              <p style={{ color: darkenHexColor(secondaryColor, 30) }}>
-                <i className="fa fa-phone-alt me-2"></i>+012 345 67890
-              </p>
-              <p style={{ color: darkenHexColor(secondaryColor, 30) }}>
-                <i className="fa fa-envelope me-2"></i>info@example.com
-              </p>
-              <div className="d-flex mt-4">
-                <a
-                  className="btn btn-lg-square btn-primary me-2"
-                  href="#"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  <i className="fab fa-twitter" style={{ color: secondaryColor }}></i>
-                </a>
-                <a
-                  className="btn btn-lg-square btn-primary me-2"
-                  href="#"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  <i className="fab fa-facebook-f" style={{ color: secondaryColor }}></i>
-                </a>
-                <a
-                  className="btn btn-lg-square btn-primary me-2"
-                  href="#"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  <i className="fab fa-linkedin-in" style={{ color: secondaryColor }}></i>
-                </a>
-                <a
-                  className="btn btn-lg-square btn-primary me-2"
-                  href="#"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  <i className="fab fa-instagram" style={{ color: secondaryColor }}></i>
-                </a>
-              </div>
+              {secondaryColor && <Tangram color={secondaryColor} />}
             </div>
             <div className="col-lg-6 ps-lg-5">
               <div className="row g-5">
