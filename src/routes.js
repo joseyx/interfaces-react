@@ -9,6 +9,9 @@ const UsersTable = React.lazy(() => import('./views/users/usersTable/usersTable'
 const UserDetails = React.lazy(() => import('./views/users/userDetails/userDetail'))
 const UserEdit = React.lazy(() => import('./views/users/userEdit/userEdit'))
 
+// Archivos
+const ArchivosTable = React.lazy(() => import('./views/archivos/complete_archivos'))
+
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
@@ -62,6 +65,7 @@ const routes = [
   { path: '/dashboard/users', name: 'Users', element: UsersTable, exact: true },
   { path: '/dashboard/user/:id', name: 'User', element: UserDetails, exact: true },
   { path: '/dashboard/user/edit/:id', name: 'User Edit', element: UserEdit, exact: true },
+  { path: '/dashboard/archivos', name: 'Archivos', element: ArchivosTable, exact: true },
   { path: '/dashboard/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/dashboard/theme/colors', name: 'Colors', element: Colors },
   { path: '/dashboard/theme/typography', name: 'Typography', element: Typography },
