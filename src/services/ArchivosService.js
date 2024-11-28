@@ -31,7 +31,7 @@ export const createArchivo = async (archivoData) => {
     })
     return response.data
   } catch (error) {
-    throw new Error('Error al crear el archivo')
+    throw error
   }
 }
 

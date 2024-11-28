@@ -22,6 +22,7 @@ import {
   CFormLabel,
   CFormSelect,
   CFormInput,
+  CAlert,
 } from '@coreui/react'
 
 import useArchivos from 'src/hooks/useArchivos'
@@ -40,6 +41,7 @@ const ArchivosTable = () => {
     audios,
     subtitulos,
     archivosError,
+    setArchivosError,
     archivosIsLoading,
     handleDeleteArchivo,
     handleCreateArchivo,
@@ -54,20 +56,26 @@ const ArchivosTable = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission logic here
-    handleCreateArchivo(formData).then(() => console.log('Archivo creado'))
-    console.log(formData)
-    setVisible(false)
+    setArchivosError('')
+
+    try {
+      await handleCreateArchivo(formData)
+      if (!archivosError) {
+        setVisible(false)
+        setFormData({
+          tipo_de_archivo: '',
+          archivo: null,
+        })
+      }
+    } catch (err) {
+      console.log('Error:', err)
+    }
   }
 
   if (archivosIsLoading) {
     return <div>Loading...</div>
-  }
-
-  if (archivosError) {
-    return <div>Error: {archivosError}</div>
   }
 
   const handleDelete = (id) => {
@@ -116,6 +124,9 @@ const ArchivosTable = () => {
                   onChange={handleChange}
                 />
               </div>
+              <div className="mb-3 pt-3">
+                {archivosError && <CAlert color="danger">{archivosError}</CAlert>}
+              </div>
             </CModalBody>
             <CModalFooter>
               <CButton color="secondary" onClick={() => setVisible(false)}>
@@ -154,7 +165,7 @@ const ArchivosTable = () => {
                     <CTableDataCell>{archivo.duracion}</CTableDataCell>
                     <CTableDataCell>
                       <a href={archivo.archivo} target="_blank" rel="noreferrer">
-                        Ver
+                        Reproducir
                       </a>
                     </CTableDataCell>
                     <CTableDataCell>
@@ -197,7 +208,7 @@ const ArchivosTable = () => {
                     <CTableDataCell>{archivo.peso}</CTableDataCell>
                     <CTableDataCell>
                       <a href={archivo.archivo} target="_blank" rel="noreferrer">
-                        Ver
+                        Ver Imagen
                       </a>
                     </CTableDataCell>
                     <CTableDataCell>
@@ -236,7 +247,7 @@ const ArchivosTable = () => {
                     <CTableDataCell>{archivo.peso}</CTableDataCell>
                     <CTableDataCell>
                       <a href={archivo.archivo} target="_blank" rel="noreferrer">
-                        Ver
+                        Abrir documento
                       </a>
                     </CTableDataCell>
                     <CTableDataCell>
@@ -279,7 +290,7 @@ const ArchivosTable = () => {
                     <CTableDataCell>{archivo.peso}</CTableDataCell>
                     <CTableDataCell>
                       <a href={archivo.archivo} target="_blank" rel="noreferrer">
-                        Ver
+                        Escuchar
                       </a>
                     </CTableDataCell>
                     <CTableDataCell>

@@ -10,7 +10,7 @@ const useArchivos = () => {
   const [videos, setVideos] = useState([])
   const [audios, setAudios] = useState([])
   const [subtitulos, setSubtitulos] = useState([])
-  const [archivosError, setArchivosError] = useState(null)
+  const [archivosError, setArchivosError] = useState('')
   const [archivosIsLoading, setArchivosIsLoading] = useState(false)
 
   const formatArchivos = (archivos) => {
@@ -39,7 +39,7 @@ const useArchivos = () => {
       setAudios(data.filter((archivo) => archivo.tipo_de_archivo === 'audio'))
       setSubtitulos(data.filter((archivo) => archivo.tipo_de_archivo === 'subtitulo'))
     } catch (err) {
-      setArchivosError(err.message)
+      console.log('Error al obtener archivos', err)
     } finally {
       setArchivosIsLoading(false)
     }
@@ -59,16 +59,19 @@ const useArchivos = () => {
   }
 
   const handleCreateArchivo = async (archivoData) => {
+    setArchivosError('')
     try {
       await createArchivo(archivoData)
       await fetchArchivos() // Fetch the updated list of archivos
     } catch (err) {
-      handleApiError(err, setArchivosError)
+      console.log('Error al crear archivo', err)
+      const error = handleApiError(err, setArchivosError)
     }
   }
 
   return {
     archivos,
+    setArchivosError,
     archivosError,
     archivosIsLoading,
     handleDeleteArchivo,

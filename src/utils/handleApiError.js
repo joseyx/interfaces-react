@@ -7,15 +7,21 @@ const traducirMensaje = (mensaje) => {
     'Invalid Credentials': 'Credenciales inválidas',
     "El número de teléfono debe estar en el formato: '+584241234567'.":
       "El número de teléfono debe estar en el formato: '+584241234567'.",
+    "['Solo se permite 1 archivo de video.']": 'Solo se permite 1 archivo de video.',
+    "['Solo se permite 3 archivos de audio.']": 'Solo se permite 3 archivos de audio.',
+    "['Solo se permite 1 archivo de Wysiwyg.']": 'Solo se permite 1 archivo de documento.',
+    "['Solo se permite 5 archivos de subtítulo.']": 'Solo se permite 5 archivos de subtítulo.',
+    "['Solo se permite 1 archivo manual.']": 'Solo se permite 1 archivo manual.',
     // Agrega más traducciones según sea necesario
   }
   return traducciones[mensaje] || mensaje
 }
 
 const handleApiError = (err, setError) => {
+  let errorMessage = 'Error desconocido'
+
   if (err.response && err.response.data) {
     const apiErrors = err.response.data
-    let errorMessage = ''
 
     if (typeof apiErrors === 'string') {
       errorMessage = apiErrors
@@ -27,11 +33,13 @@ const handleApiError = (err, setError) => {
         .join(' ')
     }
 
-    setError(new Error(traducirMensaje(errorMessage)))
+    errorMessage = traducirMensaje(errorMessage)
+    setError(errorMessage)
   } else {
-    setError(new Error('Error de registro'))
+    setError('Error de registro')
   }
-  console.error('Error:', err)
+
+  return errorMessage // Retorna el mensaje de error traducido
 }
 
 export default handleApiError

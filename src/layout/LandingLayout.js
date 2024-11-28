@@ -1525,7 +1525,7 @@ const LandingLayout = () => {
           <div className="container">
             <div className="row g-5 py-5">
               <div className="col-lg-6 pe-lg-5">
-                {secondaryColor && <Tangram color={secondaryColor} />}
+                {/*{secondaryColor && <Tangram color={secondaryColor} />}*/}
               </div>
               <div className="col-lg-6 ps-lg-5">
                 <div className="row g-5">
