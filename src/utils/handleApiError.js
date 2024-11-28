@@ -9,7 +9,7 @@ const traducirMensaje = (mensaje) => {
       "El número de teléfono debe estar en el formato: '+584241234567'.",
     "['Solo se permite 1 archivo de video.']": 'Solo se permite 1 archivo de video.',
     "['Solo se permite 3 archivos de audio.']": 'Solo se permite 3 archivos de audio.',
-    "['Solo se permite 1 archivo de Wysiwyg.']": 'Solo se permite 1 archivo de documento.',
+    "['Solo se permite 2 archivo de Wysiwyg.']": 'Solo se permite 2 archivo de documento.',
     "['Solo se permite 5 archivos de subtítulo.']": 'Solo se permite 5 archivos de subtítulo.',
     "['Solo se permite 1 archivo manual.']": 'Solo se permite 1 archivo manual.',
     // Agrega más traducciones según sea necesario

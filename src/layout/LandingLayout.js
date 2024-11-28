@@ -1525,7 +1525,7 @@ const LandingLayout = () => {
           <div className="container">
             <div className="row g-5 py-5">
               <div className="col-lg-6 pe-lg-5">
-                {/*{secondaryColor && <Tangram color={secondaryColor} />}*/}
+                {secondaryColor && <Tangram color={secondaryColor} />}
               </div>
               <div className="col-lg-6 ps-lg-5">
                 <div className="row g-5">
@@ -1565,13 +1565,17 @@ const LandingLayout = () => {
                         Terms & Condition
                       </a>
                     )}
-                    <a
-                      className="btn btn-link"
-                      href=""
-                      style={{ color: darkenHexColor(secondaryColor, 30) }}
-                    >
-                      Support
-                    </a>
+                    {documentos.length > 1 && (
+                      <a
+                        className="btn btn-link"
+                        href={documentos[1].archivo}
+                        target="_blank"
+                        style={{ color: darkenHexColor(secondaryColor, 30) }}
+                        rel="noreferrer"
+                      >
+                        PDF
+                      </a>
+                    )}
                   </div>
                   <div className="col-sm-6">
                     <h4 className="mb-4" style={{ color: secondaryColor }}>
