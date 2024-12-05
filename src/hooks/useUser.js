@@ -42,11 +42,11 @@ const useUser = (id) => {
         if (isMounted) {
           const formattedUser = {
             id: data.profile.id,
-            email: data.user.email,
+            email: data.email,
             rol: data.profile.rol,
-            username: data.user.username,
-            firstName: data.user.first_name,
-            lastName: data.user.last_name,
+            username: data.username,
+            firstName: data.first_name,
+            lastName: data.last_name,
             age: data.profile.age,
             antiguedad: data.profile.antiguedad,
             genero: data.profile.genero,

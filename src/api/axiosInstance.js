@@ -17,7 +17,7 @@ api.interceptors.request.use(
     // Obtiene el token de acceso del almacenamiento local
     const token = localStorage.getItem('accessToken')
     // Si hay un token y la URL no incluye ‘/auth/register', agrega el token a los encabezados
-    if (token && !config.url.includes('/auth/register') && !config.url.includes('/auth/login')) {
+    if (token && !config.url.includes('/users/token') && !config.url.includes('/users/login')) {
       if (config.headers) {
         config.headers.Authorization = `Bearer ${token}`
       }
@@ -42,7 +42,7 @@ api.interceptors.response.use(
       if (refreshToken) {
         try {
           // Solícita un nuevo token de acceso usando el token de refresco
-          const response = await axios.post(`${baseURL}auth/token/refresh/`, {
+          const response = await axios.post(`${baseURL}users/token/refresh/`, {
             refresh: refreshToken,
           })
 

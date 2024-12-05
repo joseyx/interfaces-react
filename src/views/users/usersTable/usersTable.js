@@ -16,6 +16,7 @@ import {
 } from '@coreui/react'
 import useUsers from 'src/hooks/useUsers'
 import { useNavigate } from 'react-router-dom'
+import { firstLetterCap } from 'src/utils/firstLetterCap'
 
 const UsersTable = () => {
   const { users, error, isLoading } = useUsers()
@@ -56,7 +57,7 @@ const UsersTable = () => {
                   <CTableRow key={user.id}>
                     <CTableHeaderCell scope="row">{user.id}</CTableHeaderCell>
                     <CTableDataCell>{user.email}</CTableDataCell>
-                    <CTableDataCell>{user.role}</CTableDataCell>
+                    <CTableDataCell>{firstLetterCap(user.role)}</CTableDataCell>
                     <CTableDataCell>
                       {user.firstName} {user.lastName}
                     </CTableDataCell>

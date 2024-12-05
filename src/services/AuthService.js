@@ -5,7 +5,7 @@ import api from '../api/axiosInstance'
 export const register = async (userData) => {
   try {
     // Envía una solicitud POST a la API para registrar al usuario
-    const response = await api.post('/auth/register', userData)
+    const response = await api.post('/users/register/', userData)
     return response.data
   } catch (error) {
     console.error('Failed to register user', error)
@@ -17,7 +17,7 @@ export const register = async (userData) => {
 export const login = async (userData) => {
   try {
     // Envía una solicitud POST a la API para iniciar sesión
-    const response = await api.post('/auth/login', userData)
+    const response = await api.post('/users/login/', userData)
     const { access, refresh } = response.data
 
     // Guarda el token de acceso en el almacenamiento local
@@ -27,7 +27,6 @@ export const login = async (userData) => {
 
     return response.data
   } catch (error) {
-    console.error('Failed to login user', error)
     throw error
   }
 }

@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react'
 import useUser from 'src/hooks/useUser'
 import useUpdateUser from 'src/hooks/useUpdateUser'
 import { fetchLocationData } from 'src/services/geocodingService'
+import { useNavigate } from 'react-router-dom'
 
 const useUpdateForm = (id) => {
+  const navigate = useNavigate()
   const { user, error: fetchError, isLoading: isFetching } = useUser(id)
   const { handleUpdateUser, error: updateError, isLoading: isUpdating } = useUpdateUser()
   const [formData, setFormData] = useState({
@@ -135,7 +137,8 @@ const useUpdateForm = (id) => {
     }
     try {
       await handleUpdateUser(id, formattedData)
-      alert('Usuario actualizado exitosamente')
+      // navigate to user details
+      navigate(`/dashboard/user/${id}`)
     } catch (err) {
       console.error('Error al actualizar el usuario:', err)
     }

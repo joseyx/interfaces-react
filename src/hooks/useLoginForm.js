@@ -33,7 +33,10 @@ const useLoginForm = () => {
         }
       }
     } catch (err) {
-      handleApiError(err, setError)
+      console.error('Error al iniciar sesión:', err)
+      const error = handleApiError(err, setError)
+      setError(error)
+      console.log('UseLoginForm error:', error)
     } finally {
       setIsLoading(false)
     }

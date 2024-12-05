@@ -13,7 +13,7 @@ export const getAllUsers = async () => {
 // get user by id
 export const getUserById = async (id) => {
   try {
-    const response = await api.get(`/user/${id}`)
+    const response = await api.get(`/users/${id}`)
     return response.data
   } catch (error) {
     throw new Error('Error al obtener el usuario')
@@ -23,7 +23,11 @@ export const getUserById = async (id) => {
 // Actualizar usuario por ID
 export const updateUser = async (id, userData) => {
   try {
-    const response = await api.put(`/user/update/${id}`, userData)
+    const response = await api.put(`/users/${id}/update-profile/`, userData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     return response.data
   } catch (error) {
     console.error('Error al actualizar el usuario:', error)
@@ -34,7 +38,7 @@ export const updateUser = async (id, userData) => {
 // get logged in user
 export const getLoggedInUser = async () => {
   try {
-    const response = await api.get('/auth/user')
+    const response = await api.get('/users/me')
     return response.data
   } catch (error) {
     throw new Error('Error al obtener el usuario')

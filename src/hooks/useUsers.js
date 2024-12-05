@@ -14,15 +14,19 @@ const useUsers = () => {
       setError(null)
       try {
         const data = await getAllUsers()
+        console.log('data', data)
         if (isMounted) {
-          const formattedUsers = data.map((item) => ({
-            id: item.profile.user,
-            email: item.user.email,
-            role: item.profile.rol,
-            username: item.user.username,
-            firstName: item.user.first_name,
-            lastName: item.user.last_name,
-          }))
+          const formattedUsers = data.map((item) => {
+            return {
+              id: item.id,
+              email: item.email,
+              role: item.profile.rol,
+              username: item.username,
+              firstName: item.first_name,
+              lastName: item.last_name,
+            }
+          })
+          console.log('formattedUsers', formattedUsers)
           setUsers(formattedUsers)
         }
       } catch (err) {

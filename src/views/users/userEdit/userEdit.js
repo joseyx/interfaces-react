@@ -1,5 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import {
   CButton,
   CCard,
@@ -12,9 +13,10 @@ import {
   CFormLabel,
   CRow,
   CAlert,
+  CFormSelect,
 } from '@coreui/react'
 import useUpdateForm from 'src/hooks/useUpdateForm'
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
 const UserEdit = () => {
@@ -31,7 +33,9 @@ const UserEdit = () => {
     handleMapClick,
   } = useUpdateForm(id)
 
-  const LocationMarker = () => {
+  const LocationMarker = ({ position }) => {
+    const map = useMap()
+
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng
@@ -39,6 +43,18 @@ const UserEdit = () => {
       },
     })
 
+    React.useEffect(() => {
+      if (position) {
+        map.setView(position, map.getZoom())
+      }
+    }, [position, map])
+
+    LocationMarker.propTypes = {
+      position: PropTypes.shape({
+        lat: PropTypes.number.isRequired,
+        lng: PropTypes.number.isRequired,
+      }).isRequired,
+    }
     return position ? <Marker position={position}></Marker> : null
   }
 
@@ -85,6 +101,18 @@ const UserEdit = () => {
                   onChange={handleChange}
                   className="mb-3"
                 />
+                <CFormLabel>Género</CFormLabel>
+                <CFormSelect
+                  name="genero"
+                  aria-label="Seleccion de genero"
+                  value={formData.genero}
+                  onChange={handleChange}
+                  className={'mb-3'}
+                >
+                  <option value="">Selecciona un género</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="femenino">Femenino</option>
+                </CFormSelect>
                 <CFormLabel>Selecciona una ubicación en el mapa</CFormLabel>
                 <div style={{ height: '400px', marginBottom: '1rem' }}>
                   <MapContainer
@@ -96,7 +124,7 @@ const UserEdit = () => {
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-                    <LocationMarker />
+                    <LocationMarker position={position} />
                   </MapContainer>
                 </div>
                 <CFormLabel>Latitud</CFormLabel>
@@ -183,7 +211,7 @@ const UserEdit = () => {
                 />
                 {updateError && (
                   <CAlert color="danger" className="mb-3">
-                    {updateError.message}
+                    {updateError}
                   </CAlert>
                 )}
                 <div className="d-grid">

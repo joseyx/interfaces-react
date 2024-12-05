@@ -92,7 +92,7 @@ const Register = () => {
                   </CInputGroup>
                   {error && (
                     <CAlert color="danger" className="mb-3">
-                      {error.message}
+                      {error}
                     </CAlert>
                   )}
                   <div className="d-grid">
