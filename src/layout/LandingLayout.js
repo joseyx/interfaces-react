@@ -711,7 +711,11 @@ const LandingLayout = () => {
               data-bs-target="#header-carousel"
               data-bs-slide="prev"
             >
-              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span
+                className="carousel-control-prev-icon"
+                aria-hidden="true"
+                style={{ '--bs-primary': darkenHexColor(secondaryColor, 20) }}
+              ></span>
               <span className="visually-hidden">Previous</span>
             </button>
             <button
@@ -720,7 +724,11 @@ const LandingLayout = () => {
               data-bs-target="#header-carousel"
               data-bs-slide="next"
             >
-              <span className="carousel-control-next-icon" aria-hidden="true"></span>
+              <span
+                className="carousel-control-next-icon"
+                aria-hidden="true"
+                style={{ '--bs-primary': darkenHexColor(secondaryColor, 20) }}
+              ></span>
               <span className="visually-hidden">Next</span>
             </button>
           </div>
@@ -732,18 +740,29 @@ const LandingLayout = () => {
               <div className="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                 <div className="row g-0">
                   <div className="col-6">
-                    <img className="img-fluid" src="img/about-1.jpg" />
+                    <img className="img-fluid" src="/img/about-1.jpg" alt={''} />
                   </div>
                   <div className="col-6">
-                    <img className="img-fluid" src="img/about-2.jpg" />
+                    <img className="img-fluid" src="/img/about-2.jpg" alt={''} />
                   </div>
                   <div className="col-6">
-                    <img className="img-fluid" src="img/about-3.jpg" />
+                    <img className="img-fluid" src="/img/about-3.jpg" alt={''} />
                   </div>
                   <div className="col-6">
-                    <div className="bg-primary w-100 h-100 mt-n5 ms-n5 d-flex flex-column align-items-center justify-content-center">
-                      <div className="icon-box-light">
-                        <i className="bi bi-award" style={{ color: primaryColor }}></i>
+                    <div
+                      className="w-100 h-100 mt-n5 ms-n5 d-flex flex-column align-items-center justify-content-center"
+                      style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
+                    >
+                      <div
+                        className="icon-box-light"
+                        style={{
+                          '--bs-light': secondaryColor,
+                        }}
+                      >
+                        <i
+                          className="bi bi-award"
+                          style={{ color: primaryColor, '::before': { color: secondaryColor } }}
+                        ></i>
                       </div>
                       <h1
                         className="display-1 mb-0"
@@ -787,7 +806,10 @@ const LandingLayout = () => {
                 </p>
                 <div className="row g-4 g-sm-5 justify-content-center">
                   <div className="col-sm-6">
-                    <div className="about-fact btn-square flex-column rounded-circle bg-primary ms-sm-auto">
+                    <div
+                      className="about-fact btn-square flex-column rounded-circle ms-sm-auto"
+                      style={{ backgroundColor: primaryColor }}
+                    >
                       <p className="mb-0" style={{ color: secondaryColor }}>
                         Awards Winning
                       </p>
@@ -801,7 +823,10 @@ const LandingLayout = () => {
                     </div>
                   </div>
                   <div className="col-sm-6 text-start">
-                    <div className="about-fact btn-square flex-column rounded-circle bg-secondary me-sm-auto">
+                    <div
+                      className="about-fact btn-square flex-column rounded-circle me-sm-auto"
+                      style={{ backgroundColor: darkenHexColor(primaryColor, 40) }}
+                    >
                       <p className="mb-0" style={{ color: secondaryColor }}>
                         Complete Cases
                       </p>
@@ -815,7 +840,10 @@ const LandingLayout = () => {
                     </div>
                   </div>
                   <div className="col-sm-6">
-                    <div className="about-fact mt-n130 btn-square flex-column rounded-circle bg-dark mx-sm-auto">
+                    <div
+                      className="about-fact mt-n130 btn-square flex-column rounded-circle mx-sm-auto"
+                      style={{ backgroundColor: darkenHexColor(primaryColor, 20) }}
+                    >
                       <p className="mb-0" style={{ color: secondaryColor }}>
                         Happy Clients
                       </p>
@@ -842,7 +870,12 @@ const LandingLayout = () => {
                   className="feature-item border h-100 p-5"
                   style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div
+                    className="icon-box-primary mb-4"
+                    style={{
+                      '--bs-primary': secondaryColor,
+                    }}
+                  >
                     <i
                       className="bi bi-award"
                       style={{ color: lightenHexColor(primaryColor, 50) }}
@@ -875,7 +908,12 @@ const LandingLayout = () => {
                   className="feature-item border h-100 p-5"
                   style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div
+                    className="icon-box-primary mb-4"
+                    style={{
+                      '--bs-primary': secondaryColor,
+                    }}
+                  >
                     <i
                       className="bi bi-people"
                       style={{ color: lightenHexColor(primaryColor, 50) }}
@@ -908,7 +946,12 @@ const LandingLayout = () => {
                   className="feature-item border h-100 p-5"
                   style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div
+                    className="icon-box-primary mb-4"
+                    style={{
+                      '--bs-primary': secondaryColor,
+                    }}
+                  >
                     <i
                       className="bi bi-cash-coin"
                       style={{ color: lightenHexColor(primaryColor, 50) }}
@@ -941,7 +984,12 @@ const LandingLayout = () => {
                   className="feature-item border h-100 p-5"
                   style={{ backgroundColor: darkenHexColor(tertiaryColor, 20) }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div
+                    className="icon-box-primary mb-4"
+                    style={{
+                      '--bs-primary': secondaryColor,
+                    }}
+                  >
                     <i
                       className="bi bi-headphones"
                       style={{ color: lightenHexColor(primaryColor, 50) }}
@@ -1009,7 +1057,12 @@ const LandingLayout = () => {
                   </p>
                   <div className="row g-5 pt-2 mb-5">
                     <div className="col-sm-6 wow fadeIn" data-wow-delay="0.3s">
-                      <div className="icon-box-primary mb-4">
+                      <div
+                        className="icon-box-primary mb-4"
+                        style={{
+                          '--bs-primary': secondaryColor,
+                        }}
+                      >
                         <i
                           className="bi bi-person-plus"
                           style={{ color: lightenHexColor(primaryColor, 50) }}
@@ -1029,7 +1082,12 @@ const LandingLayout = () => {
                       </span>
                     </div>
                     <div className="col-sm-6 wow fadeIn" data-wow-delay="0.4s">
-                      <div className="icon-box-primary mb-4">
+                      <div
+                        className="icon-box-primary mb-4"
+                        style={{
+                          '--bs-primary': secondaryColor,
+                        }}
+                      >
                         <i
                           className="bi bi-check-all"
                           style={{ color: lightenHexColor(primaryColor, 50) }}
@@ -1075,13 +1133,19 @@ const LandingLayout = () => {
                         type="button"
                         className="btn-play"
                         onClick={() => setVisible(!visible)}
+                        style={{
+                          '--bs-primary': secondaryColor,
+                        }}
                       >
-                        <span></span>
+                        <span style={{ borderLeft: `30px solid ${primaryColor}` }}></span>
                       </button>
                     </div>
                   </div>
                   <div className="col-12">
-                    <div className="bg-primary p-5">
+                    <div
+                      className="p-5"
+                      style={{ backgroundColor: darkenHexColor(primaryColor, 20) }}
+                    >
                       <div className="experience mb-4 wow fadeIn" data-wow-delay="0.3s">
                         <div className="d-flex justify-content-between mb-2">
                           <span
@@ -1216,9 +1280,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-heart-pulse" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1257,9 +1324,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-lungs" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1294,9 +1364,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-virus" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1331,9 +1404,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-capsule-pill" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1368,9 +1444,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-capsule" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1405,9 +1484,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-prescription2" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1442,9 +1524,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-clipboard2-pulse" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1480,9 +1565,12 @@ const LandingLayout = () => {
               <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
                 <div
                   className="service-item"
-                  style={{ backgroundColor: darkenHexColor(tertiaryColor, 10) }}
+                  style={{
+                    backgroundColor: darkenHexColor(tertiaryColor, 10),
+                    '--bs-primary': darkenHexColor(primaryColor, 20),
+                  }}
                 >
-                  <div className="icon-box-primary mb-4">
+                  <div className="icon-box-light mb-4" style={{ '--bs-light': secondaryColor }}>
                     <i className="bi bi-file-medical" style={{ color: primaryColor }}></i>
                   </div>
                   <h5
@@ -1630,12 +1718,15 @@ const LandingLayout = () => {
                         <input
                           type="text"
                           className="form-control border-0 py-3 px-4"
-                          style={{ background: 'rgba(255, 255, 255, .1)' }}
+                          style={{ background: darkenHexColor(secondaryColor, 30) }}
                           placeholder="Your Email Address"
                         />
                         <button
                           className="btn btn-primary px-4"
-                          style={{ backgroundColor: primaryColor, color: secondaryColor }}
+                          style={{
+                            backgroundColor: darkenHexColor(primaryColor, 15),
+                            color: secondaryColor,
+                          }}
                         >
                           Sign Up
                         </button>
