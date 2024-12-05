@@ -101,6 +101,14 @@ const UserEdit = () => {
                   onChange={handleChange}
                   className="mb-3"
                 />
+                {/*<CFormLabel>Username</CFormLabel>*/}
+                {/*<CFormInput*/}
+                {/*  name="username"*/}
+                {/*  placeholder="Username"*/}
+                {/*  value={formData.username}*/}
+                {/*  onChange={handleChange}*/}
+                {/*  className="mb-3"*/}
+                {/*/>*/}
                 <CFormLabel>Género</CFormLabel>
                 <CFormSelect
                   name="genero"

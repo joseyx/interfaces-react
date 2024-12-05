@@ -141,6 +141,10 @@ const UserView = () => {
                   <strong>Email: </strong>
                   <span>{user.email}</span>
                 </div>
+                {/*<div className={'mb-1'}>*/}
+                {/*  <strong>Username: </strong>*/}
+                {/*  <span>{user.username}</span>*/}
+                {/*</div>*/}
                 <div className={'mb-1'}>
                   <strong>Genero: </strong>
                   <span>{user.genero}</span>

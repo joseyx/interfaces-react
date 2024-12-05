@@ -13,6 +13,7 @@ const useUpdateForm = (id) => {
     firstName: '',
     lastName: '',
     email: '',
+    // username: '',
     rol: 'user',
     age: '',
     genero: '',
@@ -42,6 +43,7 @@ const useUpdateForm = (id) => {
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         email: user.email || '',
+        // username: user.username || '',
         rol: user.rol || 'user',
         age: user.age || '',
         genero: user.genero || '',
@@ -119,6 +121,7 @@ const useUpdateForm = (id) => {
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
+        username: formData.username,
       },
       profile: {
         rol: formData.rol,
