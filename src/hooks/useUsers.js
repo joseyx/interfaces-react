@@ -1,6 +1,6 @@
 // src/hooks/useUsers.js
 import { useState, useEffect } from 'react'
-import { getAllUsers } from '../services/UserService'
+import { getAllUsers, deleteUser } from '../services/UserService'
 
 const useUsers = () => {
   const [users, setUsers] = useState([])
@@ -47,7 +47,17 @@ const useUsers = () => {
     }
   }, [])
 
-  return { users, error, isLoading }
+  const handleDeleteUser = async (id) => {
+    try {
+      await deleteUser(id)
+      window.location.reload()
+    } catch (err) {
+      // handleApiError(err, setError)
+      console.log('Error', err)
+    }
+  }
+
+  return { users, error, isLoading, handleDeleteUser }
 }
 
 export default useUsers

@@ -116,9 +116,8 @@ const UserView = () => {
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisible(false)}>
-            Close
+            Cerrar
           </CButton>
-          <CButton color="primary">Save changes</CButton>
         </CModalFooter>
       </CModal>
       <CContainer>

@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 import { firstLetterCap } from 'src/utils/firstLetterCap'
 
 const UsersTable = () => {
-  const { users, error, isLoading } = useUsers()
+  const { users, error, isLoading, handleDeleteUser } = useUsers()
   const navigate = useNavigate()
 
   if (isLoading) {
@@ -32,6 +32,10 @@ const UsersTable = () => {
 
   const handleProfileClick = (id) => {
     navigate(`/dashboard/user/${id}`)
+  }
+
+  const handleDelete = (id) => {
+    handleDeleteUser(id).then(() => console.log('Usuario borrado'))
   }
 
   return (
@@ -69,7 +73,7 @@ const UsersTable = () => {
                       >
                         Perfil
                       </CButton>
-                      <CButton color="danger" variant="ghost">
+                      <CButton color="danger" variant="ghost" onClick={() => handleDelete(user.id)}>
                         Eliminar
                       </CButton>
                     </CTableDataCell>

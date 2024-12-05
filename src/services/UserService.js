@@ -44,3 +44,11 @@ export const getLoggedInUser = async () => {
     throw new Error('Error al obtener el usuario')
   }
 }
+
+export const deleteUser = async (id) => {
+  try {
+    await api.delete('/users/' + id + '/')
+  } catch (error) {
+    throw new Error('Error al borrar usuario')
+  }
+}

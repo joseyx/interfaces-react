@@ -121,6 +121,17 @@ const UserEdit = () => {
                   <option value="masculino">Masculino</option>
                   <option value="femenino">Femenino</option>
                 </CFormSelect>
+                <CFormSelect
+                  name="rol"
+                  aria-label="Seleccion un rol"
+                  value={formData.rol}
+                  onChange={handleChange}
+                  className={'mb-3'}
+                >
+                  <option value="">Selecciona un rol</option>
+                  <option value="admin">Administrador</option>
+                  <option value="user">Usuario</option>
+                </CFormSelect>
                 <CFormLabel>Selecciona una ubicación en el mapa</CFormLabel>
                 <div style={{ height: '400px', marginBottom: '1rem' }}>
                   <MapContainer

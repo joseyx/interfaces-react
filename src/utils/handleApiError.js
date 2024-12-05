@@ -17,6 +17,9 @@ const traducirMensaje = (mensaje) => {
     'email: Enter a valid email address.':
       'Email: Introduce una dirección de correo electrónico válida.',
     '0: First name and last name cannot be empty.': 'El nombre y apellido no pueden estar vacíos.',
+    'password: This field may not be blank.': 'La contraseña no puede estar vacia',
+    'password: This field may not be blank. email: user with this email already exists.':
+      'La contraseña no puede estar vacia, el email ya existe',
   }
   return traducciones[mensaje] || mensaje
 }
