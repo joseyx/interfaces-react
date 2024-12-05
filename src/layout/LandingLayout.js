@@ -567,7 +567,7 @@ const LandingLayout = () => {
           >
             <div className="carousel-inner">
               <div className="carousel-item active">
-                <img className="w-100" src="img/carousel-1.jpg" alt="Image" />
+                <img className="w-100" src="/img/carousel-1.jpg" alt="Image" />
                 <div className="carousel-caption">
                   <div className="container">
                     <div className="row justify-content-start">
@@ -611,7 +611,7 @@ const LandingLayout = () => {
                 </div>
               </div>
               <div className="carousel-item">
-                <img className="w-100" src="img/carousel-2.jpg" alt="Image" />
+                <img className="w-100" src="/img/carousel-2.jpg" alt="Image" />
                 <div className="carousel-caption">
                   <div className="container">
                     <div className="row justify-content-end">
